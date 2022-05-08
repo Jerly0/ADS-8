@@ -17,7 +17,7 @@ void Train::addCage(bool light) {
   }
 }
 
-int Train::getLenght() {
+int Train::getLength() {
   now = first;
   while (first->light) {
     shagi = 0;
