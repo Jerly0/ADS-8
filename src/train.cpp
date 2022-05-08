@@ -3,14 +3,14 @@
 
 void Train::addCage(bool light) {
   if (!first) {
-  first = create(true);
+  first = newvagon(true);
   } else if (first->prev == nullptr) {
-    first->next = create(light);
+    first->next = newvagon(light);
     first->next->prev = first;
     first->next->next = first;
     first->prev = first->next;
   } else {
-    first->prev->next = create(light);
+    first->prev->next = newvagon(light);
     first->prev->next->next = first;
     first->prev->next->prev = first->prev;
     first->prev = first->prev->next;
