@@ -1,27 +1,40 @@
 // Copyright 2021 NNTU-CS
 #include "train.h"
 
-class Train {
- private:
-   struct Cage {
-     bool light; // состояние лампочки
-     Cage *next;
-     Cage *prev;
-   };
-   int countOp; // счетчик шагов (число переходов из вагона в вагон)
-   int shagi;
-   Cage *first; // точка входа в поезд (первый вагон)
-   Cage *now;
-   Train::Cage* newvagon(bool light) {
-     Cage* vagon = new Cage;
-     vagon->prev = nullptr;
-     vagon->next = nullptr;
-     vagon->light = light;
-     return vagon;
-   }
- public:
-   Train() : countOp(0), first(nullptr), now(nullptr) {} 
-   void addCage(bool light); // добавить вагон с начальным состоянием лампочки
-   int getLength();          // вычислить длину поезда
-   int getOpCount();         // вернуть число переходов (из вагона в вагон)
-};
+void Train::addCage(bool light) {
+ if (!first) {
+  first = create(true);
+ }
+ else if (first->prev == nullptr) {
+  first->next = create(light);
+  first->next->prev = first;
+  first->next->next = first;
+  first->prev = first->next;
+ }
+ else {
+  first->prev->next = create(light);
+  first->prev->next->next = first;
+  first->prev->next->prev = first->prev;
+  first->prev = first->prev->next;
+ }
+}
+
+int Train::getLenght() {
+ now = first;
+ while (first->light) {
+  shagi = 0;
+  do {
+   shagi += 1;
+   countOp += 1;
+   now = now->next;
+  } while (!now->light);
+  now->light = false;
+  countOp += shagi;
+  now = first;
+ }
+ return shagi;
+}
+
+int Train::getOpCount() {
+ return countOp;
+}
